@@ -1,0 +1,24 @@
+{
+	"name":"Feedcast - Escute os melhores podcasts",
+	"version":"1.0",
+	"author":"Marvin Medeiros",
+	"manifest_version":2,
+	"minimum_chrome_version": "37",
+	"description":"Ouça seu podcast favorito com o Feedcast - uma ferramenta prática com um design intuitivo.",
+	"offline_enabled": true,
+   	"background": {
+      "page":"background.html"
+   },
+	"browser_action": {
+		"default_icon":"assets/img/logo_small.png",
+		"default_popup":"dist/html/main.html"
+	},
+	"permissions":[
+		"*://*/","alarms", "contextMenus", "background", "notifications", "storage", "identity", "identity.email", "webRequest", "webRequestBlocking", "downloads"
+	],
+	"icons": {
+	  "128": "assets/img/logo_small.png"
+	},
+	"short_name": "Feedcast",
+	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'"
+}
