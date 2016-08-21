@@ -12,6 +12,9 @@ module.exports = function(grunt) {
       }
     },
   uglify: {
+    options: {
+      beautify: true
+    },
     my_target: {
       files: {
         'dist/js/main.min.js': ['dist/js/module.js']

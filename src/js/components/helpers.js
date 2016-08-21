@@ -24,18 +24,44 @@ var Helpers = {
 				var item = xml.childNodes.item(i);
 				var nodeName = item.nodeName;
 				if (typeof(obj[nodeName]) == "undefined") {
-					obj[nodeName] = xmlToJson(item);
+					obj[nodeName] = this.xmlToJson(item);
 				} else {
 					if (typeof(obj[nodeName].push) == "undefined") {
 						var old = obj[nodeName];
 						obj[nodeName] = [];
 						obj[nodeName].push(old);
 					}
-					obj[nodeName].push(xmlToJson(item));
+					obj[nodeName].push(this.xmlToJson(item));
 				}
 			}
 		}
 		return obj;
+	},
+	toggleLoader : function(cond){
+		var loader = $('.loader');
+		if(cond && cond === true){
+			loader.addClass('is-active')
+		} else if(cond && cond === false) {
+			loader.removeClass('is-active')
+		} else {
+			loader.toggleClass('is-active')
+		}
+	},
+	_isset : function(ArrayObjects){
+
+		for(var i in ArrayObjects)
+			if(ArrayObjects[i] === undefined)
+				return false;
+
+		return true;
+	},
+	_durationToSeconds : function(duration){
+		var a = duration.split(':'); // split it at the colons
+
+		// minutes are worth 60 seconds. Hours are worth 60 minutes.
+		var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]); 
+
+		return seconds;
 	}
 }
 

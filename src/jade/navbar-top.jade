@@ -1,6 +1,12 @@
-.navbar-top
-	button.nav
-		i.fa.fa-navicon
-	span
-		i.fa.fa-rss-square
-		| Feedcast
+header#navbar-top.mdl-layout__header
+	.mdl-layout__header-row
+		span.mdl-layout-title Feedcast
+		.mdl-layout-spacer
+		.mdl-textfield.mdl-js-textfield.mdl-textfield--expandable.mdl-textfield--floating-label.mdl-textfield--align-right
+			label.mdl-button.mdl-js-button.mdl-button--icon(for='fixed-header-drawer-exp')
+				i.material-icons search
+			.mdl-textfield__expandable-holder
+				input#fixed-header-drawer-exp.mdl-textfield__input(type='text', name='sample')
+.mdl-layout__drawer
+	span.mdl-layout-title Categorias
+	nav.mdl-navigation.category-list-js

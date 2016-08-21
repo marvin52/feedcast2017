@@ -20,5 +20,5 @@
 	  "128": "assets/img/logo_small.png"
 	},
 	"short_name": "Feedcast",
-	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'"
+	"content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self' 'unsafe-eval'"
 }
