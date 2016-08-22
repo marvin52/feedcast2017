@@ -10161,7 +10161,7 @@ var Api = {
 				item.pubDate 		= (helpers._isset([_item.pubDate['#text']]))? _item.pubDate['#text']: false;
 				item.link 			= (helpers._isset([_item.link]))? _item.link['#text']: false;
 				item.desc 			= (helpers._isset([_item.description]))? _item.description.valueOf(): '';
-				item.url 			= (helpers._isset([_item['enclosure'], _item['enclosure']['@attributes']]))? _item['enclosure']['@attributes']['url'] : false;
+				item.url 			= (typeof  _item['enclosure'] !== 'undefined' && helpers._isset([_item['enclosure'], _item['enclosure']['@attributes']]))? _item['enclosure']['@attributes']['url'] : false;
 				item.categories 	= (helpers._isset([_item.category]))? _item.category : {};
 				item._length 		= (helpers._isset([_item['itunes:duration']]))? helpers._durationToSeconds(_item['itunes:duration']['#text']) : false;
 
