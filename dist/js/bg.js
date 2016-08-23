@@ -10075,11 +10075,15 @@ return jQuery;
 } );
 
 },{}],2:[function(require,module,exports){
-window.api = require('./components/api.js')
-function log(obj){
-	console.log(obj)
+'use strict';
+
+window.api = require('./components/api.js');
+function log(obj) {
+	console.log(obj);
 }
 window.api.init();
+
+
 },{"./components/api.js":3}],3:[function(require,module,exports){
 'use strict'
 

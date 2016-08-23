@@ -3,32 +3,30 @@ var $ = require('jquery')
 
 window.bg = chrome.extension.getBackgroundPage();
 
-
-
-feedcastClient = {
+window.feedcastClient = {
 	contentContainer : null,
-	init :  function () {
+	init :  function() {
 		this._setBinds();
 		this._setElements();
 	},
-	_setBinds : function(){
+	_setBinds : function() {
 		var $dom = $(document);
 		$dom.on('click',  '.category-list-js a', this._clickCategory.bind(this))
 		$dom.on('click',  '.btn-podcast-load', this._clickPodcast.bind(this))
 	},
-	_setElements : function(){
+	_setElements : function() {
 		this.contentContainer = document.querySelector('.mdl-layout__content')
 		this._handlebarsRegisterHelpers();
 		this._setCategories();
 		this._setContentContainer();
 	},
-	_setCategories : function(){
+	_setCategories : function() {
 		this.categoryList = document.querySelector('.category-list-js')
 		var source = document.getElementById('category-link').innerHTML
 		var template = Handlebars.compile(source);
 		this.categoryList.innerHTML = template( bg.api._api_data.categories);
 	},
-	_handlebarsRegisterHelpers : function(){
+	_handlebarsRegisterHelpers : function() {
 		Handlebars.registerHelper ('truncate', function (str, len) {
 		    if (str.length > len && str.length > 0) {
 		        var new_str = str + " ";
@@ -45,24 +43,24 @@ feedcastClient = {
 		var id = evt.target.attributes['data-category-id'].value
 		$('.mdl-layout__drawer, .mdl-layout__obfuscator').removeClass('is-visible')
 		helpers.toggleLoader(true);
-		bg.api._populatePodcastByCategory(id, function(data){
+		bg.api._populatePodcastByCategory(id, (data) => {
 			helpers.toggleLoader(false);
 			var source = document.getElementById('podcasts-by-category').innerHTML
 			var template = Handlebars.compile(source);
 			localStorage['contentContainer'] = this.contentContainer.innerHTML = template( data.data );
-		}.bind(this))
+		})
 	},
 	_clickPodcast : function(evt){
 		var id = evt.target.attributes['podcast-id'].value
 		helpers.toggleLoader(true);
-		bg.api._loadPodcasts(id, function(data){
+		bg.api._loadPodcasts(id, (data) => {
 			helpers.toggleLoader(false);
 			var source = document.getElementById('podcast-list').innerHTML
 			var template = Handlebars.compile(source);
 			localStorage['contentContainer'] = this.contentContainer.innerHTML = template( data );
-		}.bind(this))
+		})
 	},
-	_setContentContainer : function(){
+	_setContentContainer : function() {
 		if(typeof localStorage['contentContainer'] !== 'undefined'){
 			console.log(this.contentContainer)
 			this.contentContainer.innerHTML = localStorage['contentContainer'];
@@ -82,11 +80,8 @@ feedcastClient = {
 
 /* Check if the material design has finished the rendering */
 
-var mdlLoaded = setInterval(function(){ 
-	if(typeof document.querySelector('.mdl-js-layout') !== 'undefined') init()
-}, 100)
-
-function init () { 
-	feedcastClient.init(); 
-	clearInterval(mdlLoaded)
+window.onload = function() {
+	setTimeout(()=>{
+		window.feedcastClient.init(); 
+	}, 50)
 }

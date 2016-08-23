@@ -3,11 +3,23 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    babel: {
+        options: {
+            sourceMap: true,
+            presets: ['es2015']
+        },
+        dist: {
+            files: {
+                'src/js/mainBabel.js': 'src/js/main.js',
+                'src/js/bgBabel.js' : 'src/js/bg.js'
+            }
+        }
+    },
     browserify: {
       dist: {
         files: {
-          'dist/js/module.js': ['src/js/main.js'],
-          'dist/js/bg.js' : ['src/js/bg.js']
+          'dist/js/module.js': ['src/js/mainBabel.js'],
+          'dist/js/bg.js' : ['src/js/bgBabel.js']
         }
       }
     },
@@ -45,7 +57,7 @@ module.exports = function(grunt) {
   },
   watch: {
     scripts: {
-      files: ['src/js/**/*.js', 'src/sass/**/*.sass', 'src/jade/**/*.jade'],
+      files: ['src/js/main.js', 'src/js/bg.js', 'src/js/components/**/*.js', 'src/sass/**/*.sass', 'src/jade/**/*.jade'],
       tasks: ['build'],
       options: {
         interrupt: true,
@@ -64,13 +76,11 @@ module.exports = function(grunt) {
       }
     }
   });
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-sass');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-jade');
-  grunt.loadNpmTasks('grunt-browserify');
 
-  grunt.registerTask('build', ['browserify', 'uglify', 'sass', 'cssmin', 'jade']);
+  require('load-grunt-tasks')(grunt)
+
+
+
+  grunt.registerTask('build', ['babel', 'browserify', 'uglify', 'sass', 'cssmin', 'jade']);
 
 };
