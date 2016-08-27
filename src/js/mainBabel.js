@@ -11,23 +11,27 @@ window.feedcastClient = {
 		this._setBinds();
 		this._setElements();
 	},
+
 	_setBinds: function _setBinds() {
 		var $dom = $(document);
 		$dom.on('click', '.category-list-js a', this._clickCategory.bind(this));
 		$dom.on('click', '.btn-podcast-load', this._clickPodcast.bind(this));
 	},
+
 	_setElements: function _setElements() {
 		this.contentContainer = document.querySelector('.mdl-layout__content');
 		this._handlebarsRegisterHelpers();
 		this._setCategories();
 		this._setContentContainer();
 	},
+
 	_setCategories: function _setCategories() {
 		this.categoryList = document.querySelector('.category-list-js');
 		var source = document.getElementById('category-link').innerHTML;
 		var template = Handlebars.compile(source);
 		this.categoryList.innerHTML = template(bg.api._api_data.categories);
 	},
+
 	_handlebarsRegisterHelpers: function _handlebarsRegisterHelpers() {
 		Handlebars.registerHelper('truncate', function (str, len) {
 			if (str.length > len && str.length > 0) {
@@ -41,6 +45,7 @@ window.feedcastClient = {
 			return str;
 		});
 	},
+
 	_clickCategory: function _clickCategory(evt) {
 		var _this = this;
 
@@ -54,6 +59,7 @@ window.feedcastClient = {
 			localStorage['contentContainer'] = _this.contentContainer.innerHTML = template(data.data);
 		});
 	},
+
 	_clickPodcast: function _clickPodcast(evt) {
 		var _this2 = this;
 
@@ -66,6 +72,7 @@ window.feedcastClient = {
 			localStorage['contentContainer'] = _this2.contentContainer.innerHTML = template(data);
 		});
 	},
+
 	_setContentContainer: function _setContentContainer() {
 		if (typeof localStorage['contentContainer'] !== 'undefined') {
 			console.log(this.contentContainer);

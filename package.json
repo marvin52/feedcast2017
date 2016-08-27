@@ -4,6 +4,7 @@
   "description": "Feedcast chrome extension",
   "main": "index.html",
   "scripts": {
+    "dev": "grunt build && grunt watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Marvin Medeiros",
