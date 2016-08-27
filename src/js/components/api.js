@@ -5,10 +5,17 @@ var $ = require('jquery');
 
 var Api = {
 	_api : 'http://feedcast.herokuapp.com/api',
+
+
+
 	_api_data : {
 		categories : {},
-		podcastsByCategory : []
+		podcastsByCategory : [],
+		itemsByPodcast : []
 	},
+
+
+
 	_urls : {
 		yesterdayList 	: '/getPodcasts/yesterday',
 		todayList 		: '/getPodcasts',
@@ -17,20 +24,32 @@ var Api = {
 		listened 		: '/week_top_list',
 		downloaded 		: '/week_top_list/downloaded'
 	},
+
+
+
 	init : function(){
 		this._populateCategories();
 		this._populatePodcastByCategory(0); //populate all podcasts list
 	},
+
+
+
 	apiGet : function(url, callback){
 		$.get(this._api + url, function(data){
 			if(callback) callback(data);
 		}, 'json');
 	},
+
+
+
 	_populateCategories : function(){
 		this.apiGet(this._urls.categories, function(data){
 			this._api_data.categories = data
 		}.bind(this))
 	},
+
+
+
 	_populatePodcastByCategory: function(id, callback){
 		var id = parseInt(id) || 0;
 		for(var i in this._api_data.podcastsByCategory){
@@ -52,6 +71,9 @@ var Api = {
 
 		}.bind(this))
 	},
+
+
+
 	_loadPodcasts : function(id_channel, callback){
 		var self = {};
 
@@ -67,7 +89,7 @@ var Api = {
 
 
 		self.pushToPodcasts = function(_item, dataObj){
-			//try {
+			try {
 				//debugger
 				var item 			= {};
 				item.name_channel 	= dataObj.rss.channel.title['#text'];
@@ -83,27 +105,45 @@ var Api = {
 				item._length 		= (helpers._isset([_item['itunes:duration']]))? helpers._durationToSeconds(_item['itunes:duration']['#text']) : false;
 
 				(item.url)? self.podcasts.push(item) : false;
-			//}
-			//catch(err) {
-			//    console.log(err.message);
-			//}
+			}
+			catch(err) {
+			    console.log(err.message);
+			    return false;
+			}
 		}.bind(this)
 
-		$.get(self.channel.feed, function(data){
-			var dataObj = helpers.xmlToJson(data);
+		if(this._getItemsByPodcast(id_channel) === false){
+			$.get(self.channel.feed, function(data){
+				var dataObj = helpers.xmlToJson(data);
 
-			if(dataObj.rss.channel && helpers._isset([dataObj.rss.channel.item[0], dataObj.rss.channel.item.title]))
-					self.pushToPodcasts(dataObj.rss.channel.item, dataObj);
-			else
-				for(var i in dataObj.rss.channel.item)
-					self.pushToPodcasts(dataObj.rss.channel.item[i], dataObj);
+				if(dataObj.rss.channel 
+					&& dataObj.rss.channel.item
+					&& helpers._isset([dataObj.rss.channel.item[0], dataObj.rss.channel.item.title]))
+						self.pushToPodcasts(dataObj.rss.channel.item, dataObj);
+				else
+					for(var i in dataObj.rss.channel.item)
+						self.pushToPodcasts(dataObj.rss.channel.item[i], dataObj);
 
+				self.populated = true;
+			}.bind(this), 'xml').done(function(){
+				if(callback) callback(self);
+
+				this._api_data.itemsByPodcast.push({
+					channelId : self.channel_id,
+					podcasts : self.podcasts,
+					date: Date.now(),
+				});
+			}.bind(this))
+		} else {
+			self.podcasts = this._getItemsByPodcast(id_channel).podcasts;
 			self.populated = true;
+			if(callback) callback(self);
 
-		}.bind(this), 'xml').done(function(){
-			if(callback) callback(self)
-		}.bind(this))
+		}
 	},
+
+
+
 	_getPodcastById : function(id){
 
 		for(var i in this._api_data.podcastsByCategory)
@@ -114,6 +154,14 @@ var Api = {
 
 		return false;
 
+	},
+
+
+	_getItemsByPodcast : function(id){
+		for(var i in this._api_data.itemsByPodcast)
+			if(this._api_data.itemsByPodcast[i].channelId ==  id)
+				return this._api_data.itemsByPodcast[i];
+		return false;
 	}
 }
 
