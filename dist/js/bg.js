@@ -10261,12 +10261,13 @@ module.exports = Api;
 var Audio = {
 	
 	audioEl : document.createElement("AUDIO"),
+	playlist : [],
 
 	init : function (){
-		this.setBinds();
+		this._setBinds();
 	},
 
-	setBinds: function(e){
+	_setBinds: function(e){
 		this.audioEl.onabort = function(e){
 			console.log('onabort')
 		}
@@ -10324,7 +10325,25 @@ var Audio = {
 		this.audioEl.onwaiting = function(e){
 			console.log('onwaiting')
 		}
+	},
 
+	playPodcast : function(obj){
+
+	},
+	addToPlaylist : function(name, obj){
+
+	},
+
+	/**
+	 * Verify if exists playlist with such name
+	 * @param  {String} name [playlist name]
+	 * @return {Boolean}
+	 */
+	isPlaylist: function(name){
+		for(var i in this.playlist)
+			if( this.playlist[i].name == name)
+				return true
+		return false
 	}
 }
 

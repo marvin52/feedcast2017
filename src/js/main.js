@@ -15,8 +15,9 @@ window.feedcastClient = {
 	
 	_setBinds : function() {
 		var $dom = $(document);
-		$dom.on('click',  '.category-list-js a', this._clickCategory.bind(this))
-		$dom.on('click',  '.btn-podcast-load', this._clickPodcast.bind(this))
+		$dom.on('click', '.category-list-js a', this._clickCategory.bind(this))
+		$dom.on('click', '.btn-podcast-load', this._clickPodcast.bind(this))
+		$dom.on('click', '.play-podcast', this._playPodcast.bind(this))
 	},
 
 
@@ -43,6 +44,11 @@ window.feedcastClient = {
 
 	
 	_handlebarsRegisterHelpers : function() {
+
+		Handlebars.registerHelper('json', function(context) {
+		    return JSON.stringify(context);
+		});
+
 		Handlebars.registerHelper ('truncate', function (str, len) {
 		    if (str.length > len && str.length > 0) {
 		        var new_str = str + " ";
@@ -93,6 +99,23 @@ window.feedcastClient = {
 			console.log(this.contentContainer)
 			this.contentContainer.innerHTML = localStorage['contentContainer'];
 		}
+	},
+
+	/**
+	 * Play podcast when click at the play icon
+	 * @param  {[object]} evt [Event from click]
+	 */
+	_playPodcast : function(evt){
+		var node, objPodcast;
+
+		switch(true){
+			case evt.target.nodeName == "A": node = evt.target; break;
+			case evt.parentElement.nodeName == "A": node  = evt.parentElement; break;
+		}
+
+		objPodcast = JSON.parse(node.attributes['json-obj'].nodeValue);
+
+		window.bg.Audio.playPodcast(objPodcast);
 	}
 }
 
