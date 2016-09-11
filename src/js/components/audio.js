@@ -70,15 +70,29 @@ var Audio = {
 	},
 
 	playPodcast : function(obj){
-
+		this.addToPlaylist('default', obj);
 	},
-	addToPlaylist : function(name, obj){
 
+
+	/**
+	 * Add podcast object to the playlist
+	 * @param {String} name - Name of the playlist
+	 * @param {Object} obj  - Podcast object
+	 * @return {Bolean} Success push state
+	 */
+	addToPlaylist : function(name, obj){
+		if(this.isPlaylist(name)){
+			var playlistObj = this.getPlaylist(name);
+			 return playlistObj.podcasts.push(obj);
+		} else {
+			this.createPlaylist(name);
+			this.addToPlaylist(name, obj);
+		}
 	},
 
 	/**
 	 * Verify if exists playlist with such name
-	 * @param  {String} name [playlist name]
+	 * @param  {String} name - Playlist name
 	 * @return {Boolean}
 	 */
 	isPlaylist: function(name){
@@ -86,6 +100,35 @@ var Audio = {
 			if( this.playlist[i].name == name)
 				return true
 		return false
+	},
+
+	/**
+	 * Returns the playlist selected
+	 * @param  {String} name  - Playlist name
+	 * @return {Object} Playlist object
+	 */
+	getPlaylist: function(name){
+		for(var i in this.playlist)
+			if( this.playlist[i].name == name)
+				return this.playlist[i]
+		return false	
+	},
+
+
+	/**
+	 * Create a playlist from an especified name
+	 * @param  {String} name - Name of playlist
+	 * @return {Booleann} Push state
+	 */
+	createPlaylist: function(name){
+		if(!this.isPlaylist(name)){
+			return this.playlist.push({
+				name : name,
+				podcasts: []
+			});
+		} else {
+			throw "The playlist already exists"
+		}
 	}
 }
 

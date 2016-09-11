@@ -88,16 +88,18 @@ window.feedcastClient = {
 
 	/**
   * Play podcast when click at the play icon
-  * @param  {[object]} evt [Event from click]
+  * @param  {Object} evt - Event from click
   */
 	_playPodcast: function _playPodcast(evt) {
 		var node, objPodcast;
 
 		switch (true) {
 			case evt.target.nodeName == "A":
-				node = evt.target;break;
-			case evt.parentElement.nodeName == "A":
-				node = evt.parentElement;break;
+				node = evt.target;
+				break;
+			case evt.target.parentNode.nodeName == "A":
+				node = evt.target.parentNode;
+				break;
 		}
 
 		objPodcast = JSON.parse(node.attributes['json-obj'].nodeValue);
