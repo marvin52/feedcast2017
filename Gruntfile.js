@@ -3,23 +3,11 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    babel: {
-        options: {
-            sourceMap: true,
-            presets: ['es2015']
-        },
-        dist: {
-            files: {
-                'src/js/mainBabel.js': 'src/js/main.js',
-                'src/js/bgBabel.js' : 'src/js/bg.js'
-            }
-        }
-    },
     browserify: {
       dist: {
         files: {
-          'dist/js/module.js': ['src/js/mainBabel.js'],
-          'dist/js/bg.js' : ['src/js/bgBabel.js']
+          'dist/js/main.js': ['src/js/main.js'],
+          'dist/js/bg.js' : ['src/js/bg.js']
         }
       }
     },
@@ -29,7 +17,7 @@ module.exports = function(grunt) {
     },
     my_target: {
       files: {
-        'dist/js/main.min.js': ['dist/js/module.js']
+        'dist/js/main.min.js': ['dist/js/main.js']
       }
     }
   },
@@ -81,6 +69,6 @@ module.exports = function(grunt) {
 
 
 
-  grunt.registerTask('build', ['babel', 'browserify', 'uglify', 'sass', 'cssmin', 'jade']);
+  grunt.registerTask('build', ['browserify', 'uglify', 'sass', 'cssmin', 'jade']);
 
 };
