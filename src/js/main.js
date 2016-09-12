@@ -69,12 +69,12 @@ window.feedcastClient = {
 		var id = evt.target.attributes['data-category-id'].value
 		$('.mdl-layout__drawer, .mdl-layout__obfuscator').removeClass('is-visible')
 		helpers.toggleLoader(true);
-		bg.api._populatePodcastByCategory(id, (data) => {
+		bg.api._populatePodcastByCategory(id, function(data){
 			helpers.toggleLoader(false);
 			var source = document.getElementById('podcasts-by-category').innerHTML
 			var template = Handlebars.compile(source);
 			localStorage['contentContainer'] = this.contentContainer.innerHTML = template( data.data );
-		})
+		}.bind(this))
 	},
 
 
@@ -83,12 +83,12 @@ window.feedcastClient = {
 	_clickPodcast : function(evt){
 		var id = evt.target.attributes['podcast-id'].value
 		helpers.toggleLoader(true);
-		bg.api._loadPodcasts(id, (data) => {
+		bg.api._loadPodcasts(id, function(data){
 			helpers.toggleLoader(false);
 			var source = document.getElementById('podcast-list').innerHTML
 			var template = Handlebars.compile(source);
 			localStorage['contentContainer'] = this.contentContainer.innerHTML = template( data );
-		})
+		}.bind(this))
 	},
 
 
@@ -136,7 +136,7 @@ window.feedcastClient = {
 /* Check if the material design has finished the rendering */
 
 window.onload = function() {
-	setTimeout(()=>{
+	setTimeout(function(){
 		window.feedcastClient.init(); 
 	}, 50)
 }
