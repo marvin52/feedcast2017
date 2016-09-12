@@ -10337,6 +10337,9 @@ var Audio = {
 
 	playPodcast : function(obj){
 		this.addToPlaylist('default', obj);
+		this.isInPlaylist('default', obj, function(podcast){
+			window.log(podcast)
+		});
 	},
 
 
@@ -10347,14 +10350,25 @@ var Audio = {
 	 * @return {Bolean} Success push state
 	 */
 	addToPlaylist : function(name, obj){
+		//Check if the playlist exists 
 		if(this.isPlaylist(name)){
-			var playlistObj = this.getPlaylist(name);
-			 return playlistObj.podcasts.push(obj);
+			//and if the obj is not added already			
+			if(!this.isInPlaylist(name, obj)){
+				var playlistObj = this.getPlaylist(name);
+				console.count("push to playlist")
+			 	return playlistObj.podcasts.push(obj);
+			}
+			
+			return false
+
 		} else {
+			//Create the playlist and add the object to it
 			this.createPlaylist(name);
-			this.addToPlaylist(name, obj);
+			this.addToPlaylist(name, obj);	
 		}
 	},
+
+
 
 	/**
 	 * Verify if exists playlist with such name
@@ -10394,7 +10408,37 @@ var Audio = {
 			});
 		} else {
 			throw "The playlist already exists"
+			return false
 		}
+	},
+
+
+
+	/**
+	 * Check if the podcast already has been added to the playlist.
+	 * @param  {String}  playlistName - name of the playlist
+	 * @param  {Object}  podcastObj   - object of the podcast
+	 * @return {Boolean}
+	 */
+	isInPlaylist: function(playlistName, podcastObj, callback){
+		//Check if exists playlist with this name
+		if(this.isPlaylist(playlistName)){
+			var tempPlaylist = this.getPlaylist(playlistName).podcasts
+			//Check if the object exists in this playlist
+			for(var i in tempPlaylist)
+				if( JSON.stringify(tempPlaylist[i]) 
+					=== JSON.stringify(podcastObj)){
+					if(callback) callback(tempPlaylist[i]);
+					//Return true if yes
+					return true
+				}
+			//otherwise return false
+			return false
+		} else {
+			throw "There is no such playlist"
+			return false
+		}
+
 	}
 }
 
