@@ -1,7 +1,7 @@
 'use strict'
 
 var Audio = {
-	
+
 	audioEl : document.createElement("AUDIO"),
 	playlist : [],
 
@@ -84,21 +84,21 @@ var Audio = {
 	 * @return {Bolean} Success push state
 	 */
 	addToPlaylist : function(name, obj){
-		//Check if the playlist exists 
+		//Check if the playlist exists
 		if(this.isPlaylist(name)){
-			//and if the obj is not added already			
+			//and if the obj is not added already
 			if(!this.isInPlaylist(name, obj)){
 				var playlistObj = this.getPlaylist(name);
-				console.count("push to playlist")
+				obj.index = ( playlistObj.podcasts.length + 1 );
 			 	return playlistObj.podcasts.push(obj);
 			}
-			
+
 			return false
 
 		} else {
 			//Create the playlist and add the object to it
 			this.createPlaylist(name);
-			this.addToPlaylist(name, obj);	
+			this.addToPlaylist(name, obj);
 		}
 	},
 
@@ -125,7 +125,7 @@ var Audio = {
 		for(var i in this.playlist)
 			if( this.playlist[i].name == name)
 				return this.playlist[i]
-		return false	
+		return false
 	},
 
 
@@ -160,7 +160,7 @@ var Audio = {
 			var tempPlaylist = this.getPlaylist(playlistName).podcasts
 			//Check if the object exists in this playlist
 			for(var i in tempPlaylist)
-				if( JSON.stringify(tempPlaylist[i]) 
+				if( JSON.stringify(tempPlaylist[i])
 					=== JSON.stringify(podcastObj)){
 					if(callback) callback(tempPlaylist[i]);
 					//Return true if yes
